@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import src.processing as processing
+import src.visualization as visualization
 import json
 
 def shuffle_deck(seed:None):
@@ -56,7 +57,13 @@ def play_n_games(n, data):
     results_for_viz(results)
     return results
 
+def create_final_heatmap():
+    data = visualization.get_data()
 
-if __name__ == "__main__":
-    results = play_n_games(5, 'data')
-    print(results)
+    ##creating/formatting simulated data for team 1 card_win probabilities and making appropriate annotations 
+    cards_t1 = visualization.format_data(np.array(data['cards']), countwins=True)
+    card_ties_t1 = visualization.format_data(np.array(data['card_ties']), countwins=True)  
+    ct1_annots = visualization.make_annots(cards_t1, card_ties_t1)
+
+    # Create a single map for the card_win probabilties
+    fig1, ax1 = visualization.make_heatmap(data=cards_t1, annots=ct1_annots, title="My Chance of Winning (By Cards)", n=data['n'])

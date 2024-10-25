@@ -133,14 +133,3 @@ def make_heatmap(data: np.ndarray,
         ax.set_ylabel(None)
      
     return fig, ax
-
-def create_final_heatmap():
-    data = get_data()
-
-    ##creating/formatting simulated data for team 1 card_win probabilities and making appropriate annotations 
-    cards_t1 = format_data(np.array(data['cards']), countwins=True)
-    card_ties_t1 = format_data(np.array(data['card_ties']), countwins=True)  
-    ct1_annots = make_annots(cards_t1, card_ties_t1)
-
-    # Create a single map for the card_win probabilties
-    fig1, ax1 = make_heatmap(data=cards_t1, annots=ct1_annots, title="My Chance of Winning (By Cards)", n=data['n'])
