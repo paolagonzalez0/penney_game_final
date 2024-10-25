@@ -17,8 +17,8 @@ ANNOT_SIZE = 8
 
 def get_data():
     '''
-    Read the JSON file with 5 items in the 'results' folder and return the file contents.
-
+    Load the results.json file, and return a dictionary representing the contents of the file.
+    
     Arguments: None
 
     Output:
@@ -34,10 +34,9 @@ def get_data():
 
 def format_data(array: np.ndarray, countwins= False) -> np.ndarray:
     '''
-    Cleans the array of probabilities in decimal form to return whole numbers 
-    representing the percent out of 100 and fill the 'nonsense' diagonal with nan. 
-    The diagonal is filled with nan so gray is displayed along the diagonal in the visualization.
-
+    Properly formats the input data, by rounding the numbers in the array and returning an array of percentages, as whole numbers, or probabilities, as decimals.
+    Additionally, it fills the diagonal with np.nan (for proper representation in create_heatmap functions in main).
+    
     Arguments:
         - array (np.ndarray): the array of probabilities to reformat
         - countwins (bool): if True, return the whole number structure (as percentages out of 100). If False, return just the decimals.
@@ -60,6 +59,13 @@ def fill_diag(array: np.ndarray, filler) -> np.ndarray:
     '''
     Sets the diagonal going up (left to right across) to whatever the user specifies as filler. 
     Done when making annotations (filler = "") and when formatting the data (filler=None)
+
+    Arguments:
+        - array (np.ndarray): the array to be properly formatted and filled with the filler
+        - filler (Any): object to insert in the diagonal, likely None, nan, or 0
+
+    Output:
+        - array with diagonal filled in with filler
     '''
     
     flipped = np.flip(array, 0)
@@ -72,6 +78,9 @@ def make_annots(wins : np.ndarray,ties: np.ndarray) -> np.ndarray:
     '''
     Uses two 8x8 arrays for wins and ties respectively to return one array of strings in the form win(tie)
     The input arrays will need to already have gone through the format_data function or be in that format already
+
+    Arguments:
+        - wins (np.ndarray): 
     '''
     annots = []
     for i in range(8):
