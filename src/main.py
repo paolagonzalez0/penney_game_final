@@ -60,6 +60,25 @@ def play_n_games(n, data):
     results_for_viz(results)
     return results
 
+def save_figures(figures, output_html):
+    """
+    Save figures as images and embed them in an HTML file.
+    
+    :param figures: List of Matplotlib figures to save
+    :param output_html: Output HTML file name
+    """
+    # Save the figure as a PNG file in the 'figures' folder
+    filename = output_html.replace('.html', '.png')
+    figures.savefig(filename, bbox_inches='tight')
+
+    # Create HTML content
+    html_content = f"<html><body><img src='{filename}'/></body></html>"
+
+    # Save the HTML content to a file
+    with open(output_html, 'w') as f:
+        f.write(html_content)
+
+
 def create_cards_heatmap(ax: plt.Axes = None):
     data = visualization.get_data()
 
@@ -71,11 +90,11 @@ def create_cards_heatmap(ax: plt.Axes = None):
     fig1, ax1 = visualization.make_heatmap(data=cards_t1, annots=ct1_annots, title="My Chance of Winning (By Cards)", n=data['n'], cbar_single=False, ax=ax)
     if not os.path.exists('figures'):
         os.makedirs('figures')
+    #save_figures(fig1, 'figures/cards_heatmap.html')
     fig1.savefig('figures/cards_heatmap.png', bbox_inches='tight')
-    # mpld3.save_html(fig1, 'figures/cards_heatmap.html')
     return fig1, ax1
 
-def create_tricks_heatmap(ax: plt.Axes = None):
+def create_tricks_heatmap(ax: plt.Axes = None, hide_y: bool = False):
     data = visualization.get_data()
 
     tricks_t1 = visualization.format_data(np.array(data['tricks']), countwins=True)
@@ -83,12 +102,12 @@ def create_tricks_heatmap(ax: plt.Axes = None):
     tt1_annots = visualization.make_annots(tricks_t1, trick_ties_t1)
 
     # Create the heatmap on the provided axis
-    fig2, ax2 = visualization.make_heatmap(data=tricks_t1, annots=tt1_annots, title="My Chance of Winning (By Tricks)", n=data['n'], cbar_single=False, ax=ax, hide_y=True)
+    fig2, ax1 = visualization.make_heatmap(data=tricks_t1, annots=tt1_annots, title="My Chance of Winning (By Tricks)", n=data['n'], cbar_single=False, ax=ax, hide_y=hide_y)
     if not os.path.exists('figures'):
         os.makedirs('figures')
+    #save_figures(fig2, 'figures/tricks_heatmap.html')
     fig2.savefig('figures/tricks_heatmap.png', bbox_inches='tight')
-    # mpld3.save_html(fig2, 'figures/tricks_heatmap.html')
-    return fig2, ax2
+    return fig2, ax1
 
 def make_heatmap_package() -> [plt.Figure, plt.Axes]:
     '''
@@ -102,15 +121,15 @@ def make_heatmap_package() -> [plt.Figure, plt.Axes]:
     
     # Create the heatmaps directly on the axes of the subplot
     create_cards_heatmap(ax=ax[0])
-    create_tricks_heatmap(ax=ax[1])
+    create_tricks_heatmap(ax=ax[1], hide_y=True)
     
     # Add a shared colorbar for the whole figure
     cbar_ax = fig.add_axes([0.92, 0.3, 0.02, 0.4])  # Adjust as needed
     fig.colorbar(ax[0].collections[0], cax=cbar_ax)
     if not os.path.exists('figures'):
         os.makedirs('figures')
+    #save_figures(fig, 'figures/pkg_heatmap.html')
     fig.savefig('figures/pkg_heatmap.png', bbox_inches='tight')
-    # mpld3.save_html(fig, 'figures/pkg_heatmap.html')
     return fig, ax
 
 def score_deck(deck: str,
