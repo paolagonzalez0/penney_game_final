@@ -6,7 +6,7 @@ import src.processing as processing
 import src.visualization as visualization
 import json
 import matplotlib.pyplot as plt
-import mpld3
+# import mpld3
 
 def shuffle_deck(seed:None):
     '''Generates a single shuffled deck'''
@@ -71,7 +71,7 @@ def create_cards_heatmap(ax: plt.Axes = None):
     if not os.path.exists('figures'):
         os.makedirs('figures')
     fig1.savefig('figures/cards_heatmap.png', bbox_inches='tight')
-    mpld3.save_html(fig1, 'figures/cards_heatmap.html')
+    # mpld3.save_html(fig1, 'figures/cards_heatmap.html')
     return fig1, ax1
 
 def create_tricks_heatmap(ax: plt.Axes = None):
@@ -86,7 +86,7 @@ def create_tricks_heatmap(ax: plt.Axes = None):
     if not os.path.exists('figures'):
         os.makedirs('figures')
     fig2.savefig('figures/tricks_heatmap.png', bbox_inches='tight')
-    mpld3.save_html(fig2, 'figures/tricks_heatmap.html')
+    # mpld3.save_html(fig2, 'figures/tricks_heatmap.html')
     return fig2, ax2
 
 def make_heatmap_package() -> [plt.Figure, plt.Axes]:
@@ -109,7 +109,7 @@ def make_heatmap_package() -> [plt.Figure, plt.Axes]:
     if not os.path.exists('figures'):
         os.makedirs('figures')
     fig.savefig('figures/pkg_heatmap.png', bbox_inches='tight')
-    mpld3.save_html(fig, 'figures/pkg_heatmap.html')
+    # mpld3.save_html(fig, 'figures/pkg_heatmap.html')
     return fig, ax
 
 def score_deck(deck: str,
