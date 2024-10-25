@@ -34,6 +34,7 @@ main.run_n_games(n=5, data='data/')
 ## Details
 
 ### Random data: `shuffle_deck`
+To generate the random decks, the function creates a numpy ndarray with 26 zeroes and 26 ones (a zero represents a black card, and a one represents a red card). Using numpy's random number generator object, it sets a seed if the user has specified it, and then shuffles the deck. This creates an array, which is then converted to a string.
 
 ### Scoring of data: `score_deck`
 
