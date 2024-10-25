@@ -6,6 +6,7 @@ import src.processing as processing
 import src.visualization as visualization
 import json
 import matplotlib.pyplot as plt
+import mpld3
 
 def shuffle_deck(seed:None):
     '''Generates a single shuffled deck'''
@@ -67,6 +68,10 @@ def create_cards_heatmap(ax: plt.Axes = None):
 
     # Create the heatmap on the provided axis
     fig1, ax1 = visualization.make_heatmap(data=cards_t1, annots=ct1_annots, title="My Chance of Winning (By Cards)", n=data['n'], cbar_single=False, ax=ax)
+    if not os.path.exists('figures'):
+        os.makedirs('figures')
+    fig1.savefig('figures/cards_heatmap.png', bbox_inches='tight')
+    mpld3.save_html(fig1, 'figures/cards_heatmap.html')
     return fig1, ax1
 
 def create_tricks_heatmap(ax: plt.Axes = None):
@@ -78,6 +83,10 @@ def create_tricks_heatmap(ax: plt.Axes = None):
 
     # Create the heatmap on the provided axis
     fig2, ax2 = visualization.make_heatmap(data=tricks_t1, annots=tt1_annots, title="My Chance of Winning (By Tricks)", n=data['n'], cbar_single=False, ax=ax, hide_y=True)
+    if not os.path.exists('figures'):
+        os.makedirs('figures')
+    fig2.savefig('figures/tricks_heatmap.png', bbox_inches='tight')
+    mpld3.save_html(fig2, 'figures/tricks_heatmap.html')
     return fig2, ax2
 
 def make_heatmap_package() -> [plt.Figure, plt.Axes]:
@@ -97,5 +106,8 @@ def make_heatmap_package() -> [plt.Figure, plt.Axes]:
     # Add a shared colorbar for the whole figure
     cbar_ax = fig.add_axes([0.92, 0.3, 0.02, 0.4])  # Adjust as needed
     fig.colorbar(ax[0].collections[0], cax=cbar_ax)
-
+    if not os.path.exists('figures'):
+        os.makedirs('figures')
+    fig.savefig('figures/pkg_heatmap.png', bbox_inches='tight')
+    mpld3.save_html(fig, 'figures/pkg_heatmap.html')
     return fig, ax
