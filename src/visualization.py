@@ -77,7 +77,7 @@ def make_heatmap(data: np.ndarray,
                  hide_y: bool = False,
                  cbar_single: bool = True,
                  ax: plt.Axes = None
-                ) -> [plt.Figure, plt.Axes]:
+                ) -> [plt.Figure , plt.Axes]:
     '''
     If ax is None, create a new figure.
     Otherwise, add the heatmap to the provided ax.
@@ -90,9 +90,9 @@ def make_heatmap(data: np.ndarray,
         # Get the parent figure
         fig = ax.get_figure()
 
-    #seqs= ['BBB','BBR','BRB','BRR','RBB','RBR','RRB','RRR'] #if letters are desired tick labels
+    seqs= ['BBB','BBR','BRB','BRR','RBB','RBR','RRB','RRR'] #if letters are desired tick labels
 
-    seqs = [f'{i:b}'.zfill(3) for i in range(8)] ##if numbers are desired tick labels
+    # seqs = [f'{i:b}'.zfill(3) for i in range(8)] ##if numbers are desired tick labels
 
     settings = {
         'vmin': 0,
@@ -119,7 +119,6 @@ def make_heatmap(data: np.ndarray,
     '''
 
     if cbar_single: 
-
         cbar_ax = fig.add_axes([.95, 0.11, 0.035, .77])
         cb = fig.colorbar(ax.collections[0], cax=cbar_ax)
         #adjusting the tickmark sizes on colorbar 

@@ -5,6 +5,7 @@ import os
 import src.processing as processing
 import src.visualization as visualization
 import json
+import matplotlib.pyplot as plt
 
 def shuffle_deck(seed:None):
     '''Generates a single shuffled deck'''
@@ -57,13 +58,44 @@ def play_n_games(n, data):
     results_for_viz(results)
     return results
 
-def create_final_heatmap():
+def create_cards_heatmap(ax: plt.Axes = None):
     data = visualization.get_data()
 
-    ##creating/formatting simulated data for team 1 card_win probabilities and making appropriate annotations 
     cards_t1 = visualization.format_data(np.array(data['cards']), countwins=True)
-    card_ties_t1 = visualization.format_data(np.array(data['card_ties']), countwins=True)  
+    card_ties_t1 = visualization.format_data(np.array(data['card_ties']), countwins=True)
     ct1_annots = visualization.make_annots(cards_t1, card_ties_t1)
 
-    # Create a single map for the card_win probabilties
-    fig1, ax1 = visualization.make_heatmap(data=cards_t1, annots=ct1_annots, title="My Chance of Winning (By Cards)", n=data['n'])
+    # Create the heatmap on the provided axis
+    fig1, ax1 = visualization.make_heatmap(data=cards_t1, annots=ct1_annots, title="My Chance of Winning (By Cards)", n=data['n'], cbar_single=False, ax=ax)
+    return fig1, ax1
+
+def create_tricks_heatmap(ax: plt.Axes = None):
+    data = visualization.get_data()
+
+    tricks_t1 = visualization.format_data(np.array(data['tricks']), countwins=True)
+    trick_ties_t1 = visualization.format_data(np.array(data['trick_ties']), countwins=True)
+    tt1_annots = visualization.make_annots(tricks_t1, trick_ties_t1)
+
+    # Create the heatmap on the provided axis
+    fig2, ax2 = visualization.make_heatmap(data=tricks_t1, annots=tt1_annots, title="My Chance of Winning (By Tricks)", n=data['n'], cbar_single=False, ax=ax, hide_y=True)
+    return fig2, ax2
+
+def make_heatmap_package() -> [plt.Figure, plt.Axes]:
+    '''
+    Create a 1x2 grid of heatmaps based on the given data, with shared colorbar.
+    '''
+    
+    # Create a 1x2 grid for the heatmaps
+    fig, ax = plt.subplots(1, 2, 
+                           figsize=(8*2, 8), 
+                           gridspec_kw={'wspace': 0.05})
+    
+    # Create the heatmaps directly on the axes of the subplot
+    create_cards_heatmap(ax=ax[0])
+    create_tricks_heatmap(ax=ax[1])
+    
+    # Add a shared colorbar for the whole figure
+    cbar_ax = fig.add_axes([0.92, 0.3, 0.02, 0.4])  # Adjust as needed
+    fig.colorbar(ax[0].collections[0], cax=cbar_ax)
+
+    return fig, ax
