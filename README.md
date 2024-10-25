@@ -37,8 +37,15 @@ main.run_n_games(n=5, data='data/')
 ## Details
 
 ### Random data: `shuffle_deck`
-To generate the random decks, the function creates a numpy ndarray with 26 zeroes and 26 ones (a zero represents a black card, and a one represents a red card). Using numpy's random number generator object, it sets a seed if the user has specified it, and then shuffles the deck. This creates an array, which is then converted to a string.
+To generate the random decks, the `shuffle_deck` function creates a numpy ndarray with 26 zeroes and 26 ones (a zero represents a black card, and a one represents a red card). Using numpy's random number generator object, it sets a seed if the user has specified it, and then shuffles the deck. This creates an array, which is then converted to a string.  The `play_n_games` function will run this function for every iteration of n, before calculating the results.
 
-### Scoring of data: `score_deck`
+### Scoring of data: `score_deck`, `calculate_winner`, `play_one_deck`
+
+The `score_deck` function takes in the 52 character array produced by `shuffle_deck` along with the 3 pattern sequences from both players. It calcuates the number cards and tricks won by each player for a specific deck. The `calculate_winner` function takes in the outputs from `score_deck` and calculates the winner for both the cards and tricks variations, along with counting for ties in both variations. Finally, `play_one_deck` runs both the `score_deck` and `calculate_winner` functions and stores the results for the play in 4 numpy files, the winner of cards, the winner of tricks, if there was a tie in cards, and if there was a tie in tricks. This raw data can be found under the "data" folder.
+
+### Calculating probabilities: `sum_games`
+
+To calculate the win/tie probabilities, `sum_games` iterates through all the files in each folder stored under "data" and sums the raw results. It then returns the summations of each file and the average, if prompted.
 
 ### Presentation of results
+
