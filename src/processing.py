@@ -3,7 +3,6 @@ import pandas as pd
 import os
 import itertools
 from typing import Tuple
-from main import shuffle_deck
 
 def score_deck(deck: str,
                seq1: str,
@@ -124,19 +123,3 @@ def sum_games(data: str, average: bool):
     if average:
         return np.divide(games_total, num_games), num_games
     return games_total, num_games # divide each individual element by the number of games played
-
-def play_n_games(n, data):
-    for i in range(n):
-        deck = shuffle_deck(i)
-        play_one_deck(data = data, deck = deck)
-
-    filename = ['cards', 'card_ties', 'tricks', 'trick_ties']
-    results = {}
-    n_games = []
-
-    for folder in filename:
-        if folder == 'cards' or folder == 'tricks':
-            results[folder], game_num = sum_games(f'{data}{folder}', True)
-        elif folder == 'card_ties' or folder == 'trick_ties':
-            results[folder], game_num = sum_games(f'{data}{folder}', False)
-    return results
