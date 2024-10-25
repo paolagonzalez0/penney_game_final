@@ -75,11 +75,14 @@ def fill_diag(array: np.ndarray, filler) -> np.ndarray:
 
 def make_annots(wins : np.ndarray,ties: np.ndarray) -> np.ndarray:
     '''
-    Uses two 8x8 arrays for wins and ties respectively to return one array of strings in the form win(tie)
-    The input arrays will need to already have gone through the format_data function or be in that format already
+    Iterates through provided wins and ties to return an array formatted like this: wins (ties). Used to create the heatmap annotations.
 
     Arguments:
-        - wins (np.ndarray): 
+        - wins (np.ndarray): the wins for the variation formatted using format_data
+        - ties (np.ndarray): the ties for the variation formatted using format_data
+
+    Output:
+        - array where each position is in the form win (tie) for each specification.
     '''
     annots = []
     for i in range(8):
