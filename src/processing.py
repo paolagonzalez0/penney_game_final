@@ -128,7 +128,7 @@ def sum_games(data: str, average: bool):
         - average (bool): if True, returns the average (by dividing by the number of files in the directory)
     
     Output:
-        - games_total (numpy.ndarray): a NumPy array that either contains:
+        - games_total (numpy.ndarray): a numpy array that either contains:
             - the average of the files if average is True
             - the sum of the files if average is False
         - num_games (int): the number of games played
