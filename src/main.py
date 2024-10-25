@@ -12,24 +12,6 @@ def shuffle_deck(seed:None):
     rng.shuffle(deck)
     return ''.join(map(str, deck))
 
-def play_n_games(n, data):
-    for i in range(n):
-        deck = shuffle_deck(None)
-        processing.play_one_deck(data = data, deck = deck)
-
-    filename = ['cards/', 'card_ties/', 'tricks/', 'trick_ties/']
-    results = {}
-    n_games = []
-
-    for folder in filename:
-        if folder == 'cards/' or folder == 'tricks/':
-            results[folder], g_num = processing.sum_games(f'{data}{folder}', True)
-        elif folder == 'card_ties/' or folder == 'trick_ties/':
-            results[folder], g_num = processing.sum_games(f'{data}{folder}', False)
-        n_games.append(g_num)
-    results['n'] = n_games[0]
-    return results
-
 def results_for_viz(x):
     """
     Takes in results from play_n_games() function. Reformats results of simulations for heatmap visualization.
@@ -44,3 +26,40 @@ def results_for_viz(x):
         os.makedirs(data_folder)
     with open(os.path.join(data_folder,'results.json'), 'w') as json_file:
         json.dump(x, json_file, indent=4)
+
+def play_n_games(n, data):
+    """
+    Runs 
+    n: number of games user would like to simulate
+	data: data folder to store results for each iteration
+
+    """
+    if not os.path.exists(data):
+        os.makedirs(os.path.join(data,'cards'))
+        os.makedirs(os.path.join(data,'card_ties'))
+        os.makedirs(os.path.join(data,'tricks'))
+        os.makedirs(os.path.join(data,'trick_ties'))
+
+    for i in range(n):
+        deck = shuffle_deck(None)
+        processing.play_one_deck(data = data, deck = deck)
+
+    filename = ['cards', 'card_ties', 'tricks', 'trick_ties']
+    results = {}
+    n_games = []
+
+    for folder in filename:
+        if folder == 'cards' or folder == 'tricks':
+            results[folder], g_num = processing.sum_games(f'{data}/{folder}', True)
+        elif folder == 'card_ties' or folder == 'trick_ties':
+            results[folder], g_num = processing.sum_games(f'{data}/{folder}', False)
+        n_games.append(g_num)
+    results['n'] = n_games[0]
+    # Reformat and save results for viz
+    results_for_viz(results)
+    return results
+
+
+if __name__ == "__main__":
+    results = play_n_games(5, 'data')
+    print(results)

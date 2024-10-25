@@ -101,10 +101,10 @@ def play_one_deck(deck: str,
         draws_tricks.at[seq1, seq2] = tricks_draw
     
     deck_name = str(int(deck, 2))
-    np.save(f'{data}cards/{deck_name}.npy', p2_wins_cards, allow_pickle = True)
-    np.save(f'{data}tricks/{deck_name}.npy', p2_wins_tricks, allow_pickle = True)
-    np.save(f'{data}card_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
-    np.save(f'{data}trick_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
+    np.save(f'{data}/cards/{deck_name}.npy', p2_wins_cards, allow_pickle = True)
+    np.save(f'{data}/tricks/{deck_name}.npy', p2_wins_tricks, allow_pickle = True)
+    np.save(f'{data}/card_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
+    np.save(f'{data}/trick_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
 
 def sum_games(data: str, average: bool):
     '''Take all of the arrays in the specified folder, and add them together/divide by number of files to get the average 

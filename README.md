@@ -8,3 +8,8 @@ Does the winner probability change when ties are accounted for in each play?
 A full explanation of the game and win strategy can be found in the following links:
 https://en.wikipedia.org/wiki/Penney%27s_game 
 https://www.datascienceassn.org/sites/default/files/Humble-Nishiyama%20Randomness%20Game%20-%20A%20New%20Variation%20on%20Penney%27s%20Coin%20Game.pdf
+
+
+## Getting Started
+
+
