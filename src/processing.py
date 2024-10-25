@@ -11,9 +11,16 @@ def score_deck(deck: str,
     Given a shuffled deck of cards, a sequence chosen by player1, and a sequence chosen by player two, 
     return the number of cards/tricks for each variation of Penney's Game.
     
-    deck: randomnly shuffled deck of 52 cards
-    seq1: the 3-card sequence chosen by player 1 (ex. BBB, RBR)
-    seq2: the 3-card sequence chosen by player 2 (ex. RRR, BRB)
+    Arguments:
+        - deck (str): randomly shuffled deck of 52 cards
+        - seq1 (str): the 3-card sequence chosen by player 1 (ex. BBB, RBR)
+        - seq2 (str): the 3-card sequence chosen by player 2 (ex. RRR, BRB)
+
+    Outputs:
+        - p1_cards (int): the number of cards player 1 won
+        - p2_cards (int): the number of cards player 2 won
+        - p1_tricks (int): the number of tricks player 1 won
+        - p2_tricks (int): the number of tricks player 2 won
     '''
     p1_cards = 0
     p2_cards = 0
@@ -47,8 +54,8 @@ def calculate_winner(p1_cards: int,
                      p1_tricks: int,
                      p2_tricks: int):
         '''Given the number of cards and tricks for each player, calculate who wins for cards and tricks, as well as draws for cards and tricks.
-            If player one wins, the winner is set to 0. If player 2 wins, the winner is set to 1.
-            Also indicates if there was a draw.
+        If player one wins, the winner is set to 0. If player 2 wins, the winner is set to 1.
+        Also indicates if there was a draw.
 
         Arguments:
             p1_cards (int): number of cards player 1 won
@@ -60,7 +67,8 @@ def calculate_winner(p1_cards: int,
             cards_winner (int): specifies who won based on cards
             cards_draw (int): 1 if a draw occurred, 0 otherwise
             tricks_winner (int): specifies who won based on tricks
-            tricks_draw (int): 1 if a draw occured, 0 otherwise'''
+            tricks_draw (int): 1 if a draw occured, 0 otherwise
+        '''
         cards_winner = 0
         cards_draw = 0
         tricks_winner = 0
@@ -81,10 +89,15 @@ def calculate_winner(p1_cards: int,
 
 def play_one_deck(deck: str,
                   data: str):
-    '''The function takes the deck string as an input and the file path to the data folder.
-    The function plays out games between two players using all possible combinations of their strategies for a given
-     deck of cards, calculates the outcomes (wins and draws), and saves the results in a specified directory.
-     Saved in .npy files.'''
+    '''
+    For a single deck, this function plays every possible combination of sequences for both players and saves the outcome as .npy arrays.
+    
+    Arguments:
+        - deck (str): a string of either 0 or 1 representing a generated deck.
+        - data (str): the data file information is being saved to.
+    
+    Returns nothing, but saves .npy files for each category (cards, tricks, ties for cards, tricks for cards) to the specified data folder.
+    '''
     sequences = ['000', '001', '010', '011', '100', '101', '110', '111']
     combinations = itertools.product(sequences, repeat=2)
     p2_wins_cards = pd.DataFrame(columns=sequences, index=sequences)
@@ -107,9 +120,19 @@ def play_one_deck(deck: str,
     np.save(f'{data}/trick_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
 
 def sum_games(data: str, average: bool):
-    '''Take all of the arrays in the specified folder, and add them together/divide by number of files to get the average 
-    if we are looking at win/loss (boolean is True). We don't find the average if we are looking at draws as we just want 
-      count how many ties there are (boolean is False) '''
+    '''
+    Iterate over each file in the specified data filepath, and calculates the sum (or the average).
+
+    Arguments:
+        - data (str): the filepath to the specified data folder
+        - average (bool): if True, returns the average (by dividing by the number of files in the directory)
+    
+    Output:
+        - games_total (numpy.ndarray): a NumPy array that either contains:
+            - the average of the files if average is True
+            - the sum of the files if average is False
+        - num_games (int): the number of games played
+    '''
     files = [file for file in os.listdir(data) if os.path.isfile(os.path.join(data, file))] # iterate through /data directory, only process files
     games_total = None # where the sum of the games is going
     for file in files:

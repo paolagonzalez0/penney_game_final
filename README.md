@@ -29,4 +29,4 @@ main.run_n_games(n=5, data='data/')
     - `cards`, `card_ties`, `tricks`, `trick_ties`: folders within the `data` folder, each containing .npy files that represent different games. `cards` stores results for cards, `card_ties` stores ties for cards, `tricks` stores results for tricks, and `tricks_ties` stores ties for tricks.
 - `results/`: the .json file storing the current results
 - `figures/`: Stores the results for the heatmaps.
-- `main.py`: Contains the functions shown to the user 
+- `main.py`: Contains the functions shown to the user
