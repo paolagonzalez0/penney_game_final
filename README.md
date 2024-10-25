@@ -11,5 +11,22 @@ https://www.datascienceassn.org/sites/default/files/Humble-Nishiyama%20Randomnes
 
 
 ## Getting Started
+To begin, you'll need to import the `main` file.
+```
+import src.main as main
+```
 
+### Run a specified number of games using `run_n_games`
+```
+main.run_n_games(n=5, data='data/')
+```
+#### Options:
+- `n`: the number of games to play
+- `data`: the path to your data folder. If you don't have a data folder, just input the name you want your data folder to have, and `play_n_games` will make it for you.
 
+## Folders and files included
+- `data/`: The data generated (currently about 1 million entries per folder).
+    - `cards`, `card_ties`, `tricks`, `trick_ties`: folders within the `data` folder, each containing .npy files that represent different games. `cards` stores results for cards, `card_ties` stores ties for cards, `tricks` stores results for tricks, and `tricks_ties` stores ties for tricks.
+- `results/`: the .json file storing the current results
+- `figures/`: Stores the results for the heatmaps.
+- `main.py`: Contains the functions shown to the user 
