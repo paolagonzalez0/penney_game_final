@@ -57,8 +57,7 @@ def format_data(array: np.ndarray, countwins= False) -> np.ndarray:
 
 def fill_diag(array: np.ndarray, filler) -> np.ndarray:
     '''
-    Sets the diagonal going up (left to right across) to whatever the user specifies as filler. 
-    Done when making annotations (filler = "") and when formatting the data (filler=None)
+    Fills the diagonal of a given array with a given filler object.
 
     Arguments:
         - array (np.ndarray): the array to be properly formatted and filled with the filler
