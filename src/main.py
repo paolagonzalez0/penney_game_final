@@ -49,10 +49,7 @@ def play_n_games(n, data):
     n_games = []
 
     for folder in filename:
-        if folder == 'cards' or folder == 'tricks':
-            results[folder], g_num = processing.sum_games(f'{data}/{folder}', True)
-        elif folder == 'card_ties' or folder == 'trick_ties':
-            results[folder], g_num = processing.sum_games(f'{data}/{folder}', False)
+        results[folder], g_num = processing.sum_games(f'{data}/{folder}', True)
         n_games.append(g_num)
     results['n'] = n_games[0]
     # Reformat and save results for viz
