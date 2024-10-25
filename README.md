@@ -6,12 +6,16 @@ How does Penney’s game’s winner probability differ when we score based on tr
 Does the winner probability change when ties are accounted for in each play?
 
 A full explanation of the game and win strategy can be found in the following links:
+
 https://en.wikipedia.org/wiki/Penney%27s_game
-<br>
+
 https://www.datascienceassn.org/sites/default/files/Humble-Nishiyama%20Randomness%20Game%20-%20A%20New%20Variation%20on%20Penney%27s%20Coin%20Game.pdf
 
 
 ## Getting Started
+
+An example for how to run this program can be found in final_run.ipynb.
+
 To begin, you'll need to import the `main` file.
 ```
 import src.main as main
@@ -46,7 +50,11 @@ The `score_deck` function takes in the 52 character array produced by `shuffle_d
 
 ### Calculating probabilities: `sum_games`
 
-To calculate the win/tie probabilities, `sum_games` iterates through all the files in each folder stored under "data" and sums the raw results. It then returns the summations of each file and the average, if prompted.
+To calculate the win/tie probabilities, `sum_games` iterates through all the files in each folder stored under "data" and sums the raw results. It then returns the summations (or the average) of a given folder "cards", "tricks", "card_ties", or "trick_ties" along with an integer representing the number of games played/stored in the file.
+
+### Running main program: 
+
+To run the entire process, the `play_n_games` was created 
 
 ### Presentation of results
 
