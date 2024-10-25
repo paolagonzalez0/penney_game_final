@@ -15,9 +15,14 @@ TICK_SIZE = 10
 ANNOT_SIZE = 8
 
 
-def get_data() -> np.ndarray:
+def get_data():
     '''
     Read the JSON file with 5 items in the 'results' folder and return the file contents.
+
+    Arguments: None
+
+    Output:
+        - x (dict): dict of results from the results.json folder.
     '''
     file_path = os.path.join('results', 'results.json')
 
@@ -30,8 +35,15 @@ def get_data() -> np.ndarray:
 def format_data(array: np.ndarray, countwins= False) -> np.ndarray:
     '''
     Cleans the array of probabilities in decimal form to return whole numbers 
-    representing the percent out of 100 and fill the 'nonsense' diagonal with None. 
-    The diagonal is filled with None so gray is displayed along the diagonal in the visualization.
+    representing the percent out of 100 and fill the 'nonsense' diagonal with nan. 
+    The diagonal is filled with nan so gray is displayed along the diagonal in the visualization.
+
+    Arguments:
+        - array (np.ndarray): the array of probabilities to reformat
+        - countwins (bool): if True, return the whole number structure (as percentages out of 100). If False, return just the decimals.
+
+    Output:
+        - flipped (np.ndarray): array that has been properly flipped, and has values properly rounded as either whole numbers or decimals
     '''
     #takes the original decimal probabilities and puts them in the whole number format of percent and fills the 'nonsense' diagonal
 
