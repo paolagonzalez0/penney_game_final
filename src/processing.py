@@ -3,7 +3,6 @@ import pandas as pd
 import os
 import itertools
 from typing import Tuple
-from main import shuffle_deck
 
 def score_deck(deck: str,
                seq1: str,
@@ -102,10 +101,10 @@ def play_one_deck(deck: str,
         draws_tricks.at[seq1, seq2] = tricks_draw
     
     deck_name = str(int(deck, 2))
-    np.save(f'{data}cards/{deck_name}.npy', p2_wins_cards, allow_pickle = True)
-    np.save(f'{data}tricks/{deck_name}.npy', p2_wins_tricks, allow_pickle = True)
-    np.save(f'{data}card_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
-    np.save(f'{data}trick_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
+    np.save(f'{data}/cards/{deck_name}.npy', p2_wins_cards, allow_pickle = True)
+    np.save(f'{data}/tricks/{deck_name}.npy', p2_wins_tricks, allow_pickle = True)
+    np.save(f'{data}/card_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
+    np.save(f'{data}/trick_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
 
 def sum_games(data: str, average: bool):
     '''Take all of the arrays in the specified folder, and add them together/divide by number of files to get the average 
@@ -124,19 +123,3 @@ def sum_games(data: str, average: bool):
     if average:
         return np.divide(games_total, num_games), num_games
     return games_total, num_games # divide each individual element by the number of games played
-
-def play_n_games(n, data):
-    for i in range(n):
-        deck = shuffle_deck(i)
-        play_one_deck(data = data, deck = deck)
-
-    filename = ['cards', 'card_ties', 'tricks', 'trick_ties']
-    results = {}
-    n_games = []
-
-    for folder in filename:
-        if folder == 'cards' or folder == 'tricks':
-            results[folder], game_num = sum_games(f'{data}{folder}', True)
-        elif folder == 'card_ties' or folder == 'trick_ties':
-            results[folder], game_num = sum_games(f'{data}{folder}', False)
-    return results
