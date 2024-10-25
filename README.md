@@ -30,3 +30,11 @@ main.run_n_games(n=5, data='data/')
 - `results/`: the .json file storing the current results
 - `figures/`: Stores the results for the heatmaps.
 - `main.py`: Contains the functions shown to the user
+
+## Details
+
+### Random data: `shuffle_deck`
+
+### Scoring of data: `score_deck`
+
+### Presentation of results

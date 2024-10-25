@@ -111,3 +111,47 @@ def make_heatmap_package() -> [plt.Figure, plt.Axes]:
     fig.savefig('figures/pkg_heatmap.png', bbox_inches='tight')
     mpld3.save_html(fig, 'figures/pkg_heatmap.html')
     return fig, ax
+
+def score_deck(deck: str,
+               seq1: str,
+               seq2: str) -> Tuple[int]:
+    '''
+    Given a shuffled deck of cards, a sequence chosen by player1, and a sequence chosen by player two, 
+    return the number of cards/tricks for each variation of Penney's Game.
+    
+    Arguments:
+        - deck (str): randomly shuffled deck of 52 cards
+        - seq1 (str): the 3-card sequence chosen by player 1 (ex. BBB, RBR)
+        - seq2 (str): the 3-card sequence chosen by player 2 (ex. RRR, BRB)
+
+    Outputs:
+        - p1_cards (int): the number of cards player 1 won
+        - p2_cards (int): the number of cards player 2 won
+        - p1_tricks (int): the number of tricks player 1 won
+        - p2_tricks (int): the number of tricks player 2 won
+    '''
+    p1_cards = 0
+    p2_cards = 0
+    pile = 2
+    
+    p1_tricks = 0
+    p2_tricks = 0
+    
+    i = 0
+    while i < len(deck) - 2:
+        pile += 1
+        current_sequence = deck[i:i+3]
+        if current_sequence == seq1:
+            p1_cards += pile
+            pile = 2
+            p1_tricks += 1
+            i += 3
+        elif current_sequence == seq2:
+            p2_cards += pile
+            pile = 2 
+            p2_tricks += 1
+            i += 3
+        else:
+            i += 1
+
+    return p1_cards, p2_cards, p1_tricks, p2_tricks
