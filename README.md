@@ -42,19 +42,23 @@ main.run_n_games(n=5, data='data/')
 ## Details
 
 ### Random data: `shuffle_deck`
+
 To generate the random decks, the `shuffle_deck` function creates a numpy ndarray with 26 zeroes and 26 ones (a zero represents a black card, and a one represents a red card). Using numpy's random number generator object, it sets a seed if the user has specified it, and then shuffles the deck. This creates an array, which is then converted to a string.  The `play_n_games` function will run this function for every iteration of n, before calculating the results.
 
 ### Scoring of data: `score_deck`, `calculate_winner`, `play_one_deck`
 
-The `score_deck` function takes in the 52 character array produced by `shuffle_deck` along with the 3 pattern sequences from both players. It calcuates the number cards and tricks won by each player for a specific deck. The `calculate_winner` function takes in the outputs from `score_deck` and calculates the winner for both the cards and tricks variations, along with counting for ties in both variations. Finally, `play_one_deck` runs both the `score_deck` and `calculate_winner` functions and stores the results for the play in 4 numpy files, the winner of cards, the winner of tricks, if there was a tie in cards, and if there was a tie in tricks. This raw data can be found under the "data" folder.
+The `score_deck` function takes in the 52 character array produced by `shuffle_deck` along with the 3 pattern sequences from both players. It calcuates the number cards and tricks won by each player for a specific deck. The `calculate_winner` function takes in the outputs from `score_deck` and calculates the winner for both the cards and tricks variations, along with counting for ties in both variations. Finally, `play_one_deck` runs both the `score_deck` and `calculate_winner` functions and stores the results for the play in 4 numpy files, the winner of cards, the winner of tricks, if there was a tie in cards, and if there was a tie in tricks. This raw data can be found under the "data" directory.
 
 ### Calculating probabilities: `sum_games`
 
-To calculate the win/tie probabilities, `sum_games` iterates through all the files in each folder stored under "data" and sums the raw results. It then returns the summations (or the average) of a given folder "cards", "tricks", "card_ties", or "trick_ties" along with an integer representing the number of games played/stored in the file.
+To calculate the win/tie probabilities, `sum_games` iterates through all the files in each directory stored under "data" and sums the raw results. It then returns the summations (or the average) of a given directory "cards", "tricks", "card_ties", or "trick_ties" along with an integer representing the number of games played/stored in the file.
 
-### Running main program: 
+### Running main program: `play_n_games`
 
-To run the entire process, the `play_n_games` was created 
+To run the entire process, the `play_n_games` will run the processes described above (i.e. generate random data, score the plays, and calculate the win and tie probabilities for all simulations). It writes the final JSON results file storing an 8x8 list of lists for the cards, tricks, card_ties, and trick_ties win and tie probabilities. This file is then stored in "results" directory. This file also returns the results formatted for the visualization task.
 
-### Presentation of results
+### Visualization: `create_heatmap`, `make_heatmap_package`, `save_figures`
+
+To visualize the results, the `create_cards_heatmap`, `create_tricks_heatmap`, and `make_heatmap_package` create the final heatmaps for comparison. Along with this, it saves the PNG and HTML files (using `save_figures`) of each visualization in the "figures" directory. To create a single heatmap using `create_heatmap`, the `get_data` function loads in the final simulation results from the JSON file. Next, we reformat the data (either cards/card_ties or tricks/trick_ties) using `format_data`. The labels for the heatmap are generated using `make_annots`. 
+
 
