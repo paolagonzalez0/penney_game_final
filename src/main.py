@@ -80,47 +80,41 @@ def save_figures(figures, output_html):
         f.write(html_content)
 
 
-def create_cards_heatmap(ax: plt.Axes = None, pkg: bool = False):
-    data = visualization.get_data()
-
-    cards_t1 = visualization.format_data(np.array(data['cards']), countwins=True)
-    card_ties_t1 = visualization.format_data(np.array(data['card_ties']), countwins=True)
-    ct1_annots = visualization.make_annots(cards_t1, card_ties_t1)
-
-    # Create the heatmap on the provided axis
-    fig1, ax1 = visualization.make_heatmap(data=cards_t1, annots=ct1_annots, title="My Chance of Winning (By Cards)", n=data['n'], cbar_single=False, ax=ax)
-    ax1.set_aspect('equal', adjustable='box')
-    if not pkg:
-     cbar1 = fig1.colorbar(ax1.collections[0], ax=ax1)
-     cbar1.ax.yaxis.set_major_formatter(PercentFormatter(xmax=100))
-     #fig1.savefig('figures/cards_heatmap.png', bbox_inches='tight')
-     save_figures(fig1, 'figures/cards_heatmap.html')
-
+def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pkg: bool = False):
+    # Ensure 'figures' directory exists
     if not os.path.exists('figures'):
         os.makedirs('figures')
-
-    return fig1, ax1
-
-def create_tricks_heatmap(ax: plt.Axes = None, hide_y: bool = False, pkg: bool = False):
-    data = visualization.get_data()
-
-    tricks_t1 = visualization.format_data(np.array(data['tricks']), countwins=True)
-    trick_ties_t1 = visualization.format_data(np.array(data['trick_ties']), countwins=True)
-    tt1_annots = visualization.make_annots(tricks_t1, trick_ties_t1)
-
-    # Create the heatmap on the provided axis
-    fig2, ax2 = visualization.make_heatmap(data=tricks_t1, annots=tt1_annots, title="My Chance of Winning (By Tricks)", n=data['n'], cbar_single=False, ax=ax, hide_y=hide_y)
-    ax2.set_aspect('equal', adjustable='box')
-    if not pkg:
-        cbar1 = fig2.colorbar(ax2.collections[0], ax=ax2)
-        cbar1.ax.yaxis.set_major_formatter(PercentFormatter(xmax=100))
-        #fig2.savefig('figures/tricks_heatmap.png', bbox_inches='tight')
-        save_figures(fig2, 'figures/tricks_heatmap.html')
     
-    if not os.path.exists('figures'):
-        os.makedirs('figures')
+    # Load and format data
+    data = visualization.get_data()
+    
+    # Determine specifications based on either cards or tricks
+    if variation == 'cards':
+        t1_data = visualization.format_data(np.array(data['cards']), countwins=True)
+        ties_data = visualization.format_data(np.array(data['card_ties']), countwins=True)
+        title = "My Chance of Winning (By Cards)"
+        filename = 'figures/cards_heatmap.html'
+    elif variation == 'tricks':
+        t1_data = visualization.format_data(np.array(data['tricks']), countwins=True)
+        ties_data = visualization.format_data(np.array(data['trick_ties']), countwins=True)
+        title = "My Chance of Winning (By Tricks)"
+        filename = 'figures/tricks_heatmap.html'
+    else:
+        raise ValueError("Invalid data_type specified. Use 'cards' or 'tricks'.")
 
-    return fig2, ax2
+    # Generate annotations
+    annots = visualization.make_annots(t1_data, ties_data)
+
+    # Create heatmap
+    fig, ax = visualization.make_heatmap(data=t1_data, annots=annots, title=title, n=data['n'], cbar_single=False, ax=ax, hide_y=hide_y)
+    ax.set_aspect('equal', adjustable='box')
+    
+    if not pkg:
+        cbar = fig.colorbar(ax.collections[0], ax=ax)
+        cbar.ax.yaxis.set_major_formatter(PercentFormatter(xmax=100))
+        save_figures(fig, filename)
+
+    return fig, ax
 
 def make_heatmap_package() -> [plt.Figure, plt.Axes]:
     '''
@@ -133,8 +127,8 @@ def make_heatmap_package() -> [plt.Figure, plt.Axes]:
                            gridspec_kw={'wspace': 0.05})
     
     # Create the heatmaps directly on the axes of the subplot
-    create_cards_heatmap(ax=ax[0],pkg=True)
-    create_tricks_heatmap(ax=ax[1], hide_y=True,pkg=True)
+    create_heatmap('cards', ax=ax[0],pkg=True)
+    create_heatmap('tricks',ax=ax[1], hide_y=True,pkg=True)
     
     # Add a shared colorbar for the whole figure
     cbar_ax = fig.add_axes([0.92, 0.3, 0.02, 0.4])  
@@ -175,7 +169,9 @@ def score_deck(deck: str,
     p2_tricks = 0
     
     i = 0
-    while i < len(deck) - 2:
+    deck_len = len(deck) - 2
+
+    while i < deck_len:
         pile += 1
         current_sequence = deck[i:i+3]
         if current_sequence == seq1:
