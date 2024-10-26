@@ -59,6 +59,6 @@ To run the entire process, the `play_n_games` will run the processes described a
 
 ### Visualization: `create_heatmap`, `make_heatmap_package`, `save_figures`
 
-To visualize the results, the `create_cards_heatmap`, `create_tricks_heatmap`, and `make_heatmap_package` create the final heatmaps for comparison. Along with this, it saves the PNG and HTML files (using `save_figures`) of each visualization in the "figures" directory. To create a single heatmap using `create_heatmap`, the `get_data` function loads in the final simulation results from the JSON file. Next, we reformat the data (either cards/card_ties or tricks/trick_ties) using `format_data`. The labels for the heatmap are generated using `make_annots`. 
+To visualize the results, the `create_heatmap` and `make_heatmap_package` create the final heatmaps for comparison. Along with this, it saves the PNG and HTML files (using `save_figures`) of each visualization in the "figures" directory. To create a single heatmap using `create_heatmap`, the `get_data` function loads in the final simulation results from the JSON file. Next, we reformat the data (either cards/card_ties or tricks/trick_ties) using `format_data`. The labels for the heatmap are generated using `make_annots`. Finally, we input the data and labels into `make_heatmap` and return the visualization. 
 
 
