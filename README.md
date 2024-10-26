@@ -29,6 +29,12 @@ main.run_n_games(n=5, data='data/')
 - `n`: the number of games to play
 - `data`: the path to your data folder. If you don't have a data folder, just input the name you want your data folder to have, and `play_n_games` will make it for you.
 
+To visualize and compare the results, you can run the following code.
+
+```
+main.make_heatmap_package()
+```
+
 ## Folders and files included
 - `data/`: The data generated (currently about 1 million entries per folder).
     - `cards`, `card_ties`, `tricks`, `trick_ties`: folders within the `data` folder, each containing .npy files that represent different games. `cards` stores results for cards, `card_ties` stores ties for cards, `tricks` stores results for tricks, and `tricks_ties` stores ties for tricks.
@@ -36,7 +42,7 @@ main.run_n_games(n=5, data='data/')
 - `figures/`: Stores the results for the heatmaps.
 - `src/`: Folder containing backend python script code for penney project.
     - `main.py`: Contains the functions shown to the user.
-    - `processing.py`: Contains the functions and code used for the processing task.
+    - `processing.py`: Contains the functions and code used for the simulation and processing tasks.
     - `visualization.py`: Contains the functions and code used for the visualization task.
 
 ## Details
@@ -60,5 +66,9 @@ To run the entire process, the `play_n_games` will run the processes described a
 ### Visualization: `create_heatmap`, `make_heatmap_package`, `save_figures`
 
 To visualize the results, the `create_heatmap` and `make_heatmap_package` create the final heatmaps for comparison. Along with this, it saves the PNG and HTML files (using `save_figures`) of each visualization in the "figures" directory. To create a single heatmap using `create_heatmap`, the `get_data` function loads in the final simulation results from the JSON file. Next, we reformat the data (either cards/card_ties or tricks/trick_ties) using `format_data`. The labels for the heatmap are generated using `make_annots`. Finally, we input the data and labels into `make_heatmap` and return the visualization. 
+
+### Final Output
+
+This program produces two heatmaps to compare the win probabilities of the two variations of Penney's game. These visualizations can be found in the "figures" directory. Each heatmap cell represents the win probability of each pair of 3-pattern sequences used by the player and their opponent. The darker the cell, the more likely it is for the player to win and the lighter the cell, the more likely it is for the opponent to win. Since both players cannot have the same pattern, the diagonal is grayed out. By putting the cards and tricks heatmaps next to one another, we can easily compare the final win results.
 
 
