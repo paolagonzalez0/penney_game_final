@@ -53,7 +53,8 @@ def calculate_winner(p1_cards: int,
                      p2_cards: int,
                      p1_tricks: int,
                      p2_tricks: int):
-        '''Given the number of cards and tricks for each player, calculate who wins for cards and tricks, as well as draws for cards and tricks.
+        '''
+        Given the number of cards and tricks for each player, calculate who wins for cards and tricks, as well as draws for cards and tricks.
         If player one wins, the winner is set to 0. If player 2 wins, the winner is set to 1.
         Also indicates if there was a draw.
 
