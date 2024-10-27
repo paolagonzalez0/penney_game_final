@@ -15,7 +15,7 @@ TICK_SIZE = 10
 ANNOT_SIZE = 8
 
 
-def get_data():
+def get_data() -> dict:
     '''
     Load the results.json file, and return a dictionary representing the contents of the file.
     
