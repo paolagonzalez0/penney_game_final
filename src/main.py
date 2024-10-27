@@ -10,23 +10,19 @@ import matplotlib.pyplot as plt
 import mpld3
 from matplotlib.ticker import PercentFormatter
 
-def shuffle_deck(seed:int):
+def shuffle_deck(seed:int) -> str:
     '''Generates a single shuffled deck of 0s and 1s. 
 
-    Argumements: 
+    Arguments: 
     seed (int): Seed to ensure reproducibility
 
     Output:
     A string of 52 characters where each character is either '0' or '1', representing a shuffled deck.
     '''
-    # initializing random number generator with the given seed for reproducibility
     rng = np.random.default_rng(seed = seed) 
-    # creating a deck of 26 ones and 26 zeros
-    deck = np.ndarray.flatten((np.stack((np.ones(26), np.zeros(26)), axis= 0).astype(int)))
-    # shuffling the deck
-    rng.shuffle(deck)
-    # converting shuffled deck to a string
-    return ''.join(map(str, deck))
+    deck = np.ndarray.flatten((np.stack((np.ones(26), np.zeros(26)), axis= 0).astype(int))) # make a deck of 26 ones and zeroes
+    rng.shuffle(deck) # then shuffle the deck
+    return ''.join(map(str, deck)) # convert to string
 
 def results_for_viz(x):
     """
@@ -35,8 +31,8 @@ def results_for_viz(x):
     Arguments:
     x (dict): A dictionary containing the results from the play_n_games() function. 
                 Keys:
-                - 'cards': A list of number of cards won by Me player.
-                - 'tricks': A list of number of tricks won by Me player.
+                - 'cards': A list of number of cards won by the Me player.
+                - 'tricks': A list of number of tricks won by the Me player.
                 - 'card_ties': A list of counts of card ties.
                 - 'trick_ties': A list of counts of trick ties.
 
@@ -44,22 +40,19 @@ def results_for_viz(x):
     Saves the reformatted results to a JSON file named 'results.json' in the 'results' folder. If the 
     folder does not exist, it will be created.
     """
-    # converting each result list in the dictionary to a standard list
     x['cards'] = x['cards'].tolist()
     x['tricks'] = x['tricks'].tolist()
     x['card_ties'] = x['card_ties'].tolist()
     x['trick_ties'] = x['trick_ties'].tolist()
 
-    # specify the folder to save results in
     data_folder = 'results'
-    # checking if the results folder exists, and creating it if it does not
+    # make results folder if it does not exist
     if not os.path.exists(data_folder):
         os.makedirs(data_folder)
-    # opening a JSON file for writing the results and writing the results to the JSON file
     with open(os.path.join(data_folder,'results.json'), 'w') as json_file:
-        json.dump(x, json_file, indent=4)
+        json.dump(x, json_file, indent=4) # dump results into json file
 
-def play_n_games(n: int, data: str, initial_seed: int = 0):
+def play_n_games(n: int, data: str, initial_seed: int = 0) -> dict:
     """
     Runs simulations for n games, saving results to the specified data folder.
     
@@ -74,32 +67,27 @@ def play_n_games(n: int, data: str, initial_seed: int = 0):
     of tricks won, and ties that occurred during the games for both variations. If the data folder does 
     not exist, it will be created. The results are added to the results that already exist in the results.json file. 
     """
-    # checking if the specified data folder exists; if not, create it and the subfolders for different result types
+    # makes data folder if it does not exist
     if not os.path.exists(data):
         os.makedirs(os.path.join(data,'cards'))
         os.makedirs(os.path.join(data,'card_ties'))
         os.makedirs(os.path.join(data,'tricks'))
         os.makedirs(os.path.join(data,'trick_ties'))
 
-    # simulating n games, increasing the seed by 1 for each game for reproducibility
-    for i in range(n):
+    for i in range(n): # runs n games
         deck = shuffle_deck(seed=initial_seed + i)
         processing.play_one_deck(data = data, deck = deck)
 
-    # Specify the result types/folders
     filename = ['cards', 'card_ties', 'tricks', 'trick_ties']
-    # creating dictionary to store results for each variation
     results = {}
-    # creating list to store the number of games for each result type
     n_games = []
 
-    # summing up the results from each specified folder and storing them
+    # calculate the average for each folder
     for folder in filename:
-        results[folder], g_num = processing.sum_games(f'{data}/{folder}', True) # getting results and game count
-        n_games.append(g_num) # appending the number of games to the list
-
-    results['n'] = n_games[0] # storing the total number of games played
-    # reformatting and saving results for viz
+        results[folder], g_num = processing.sum_games(f'{data}/{folder}', True)
+        n_games.append(g_num)
+    results['n'] = n_games[0]
+    # Reformatting and save results for viz
     results_for_viz(results)
     return results
 
@@ -127,9 +115,9 @@ def save_figures(figures, file_name):
         f.write(html_content)
 
 
-def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pkg: bool = False):
+def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pkg: bool = False) -> [plt.Figure, plt.Axes]:
     '''
-    Creates a heatmap visualization based on either card or trick data, saving the output as an html and png file.
+    Creates a heatmap visualization based on either card or trick data, saving the output as a html and png file.
     Visualization specifications are based on class specifications. 
 
     Arguments:
@@ -144,17 +132,17 @@ def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pk
     Output:
         A tuple containing the Matplotlib figure and axes objects for the created heatmap. 
         If `pkg` is `False`, the figure is saved as a PNG image in the 'figures' folder and creates an 
-        HTML file that embeds this figure. The files are named according to the specified file name.
+        HTML file that embeds this figure. The files are named according to the specified variation.
     '''
 
-    # Ensure 'figures' directory exists
+    # make figures directory if it does not exist
     if not os.path.exists('figures'):
         os.makedirs('figures')
     
-    # Load and format data
+    # format the data from results.json
     data = visualization.get_data()
     
-    # Determine specifications based on either cards or tricks
+    # for cards and tricks, generate variation-specific data for the heatmaps
     if variation == 'cards':
         t1_data = visualization.format_data(np.array(data['cards']), countwins=True)
         ties_data = visualization.format_data(np.array(data['card_ties']), countwins=True)
@@ -168,13 +156,14 @@ def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pk
     else:
         raise ValueError("Invalid data_type specified. Use 'cards' or 'tricks'.")
 
-    # Generate annotations
+    # make annotations with cards and ties
     annots = visualization.make_annots(t1_data, ties_data)
 
-    # Create heatmap
+    # make the heatmap with all of the data
     fig, ax = visualization.make_heatmap(data=t1_data, annots=annots, title=title, n=data['n'], cbar_single=False, ax=ax, hide_y=hide_y)
     ax.set_aspect('equal', adjustable='box')
-    
+
+    # changes for a single visualization
     if not pkg:
         cbar = fig.colorbar(ax.collections[0], ax=ax)
         cbar.ax.yaxis.set_major_formatter(PercentFormatter(xmax=100))
@@ -194,59 +183,58 @@ def make_heatmap_package() -> [plt.Figure, plt.Axes]:
         and 'pkg_heatmap.png', respectively.
     '''
     
-    # Create a 1x2 grid for the heatmaps
+    # make the heatmap space
     fig, ax = plt.subplots(1, 2, 
                            figsize=(8*2, 8), 
                            gridspec_kw={'wspace': 0.05})
     
-    # Create the heatmaps directly on the axes of the subplot
+    # make heatmaps for tricks and cards, they should map onto the previously created fig and ax
     create_heatmap('cards', ax=ax[0],pkg=True)
     create_heatmap('tricks',ax=ax[1], hide_y=True,pkg=True)
     
-    # Add a shared colorbar for the whole figure
+    # create one colorbar for the entire figure
     cbar_ax = fig.add_axes([0.92, 0.3, 0.02, 0.4])  
     colorbar = fig.colorbar(ax[0].collections[0], cax=cbar_ax)
     colorbar.ax.yaxis.set_major_formatter(PercentFormatter(xmax=100))
 
+    # make a folder for figures if it does not exist already
     if not os.path.exists('figures'):
         os.makedirs('figures')
     save_figures(fig, 'figures/pkg_heatmap.html')
     fig.savefig('figures/pkg_heatmap.png', bbox_inches='tight')
     return fig, ax
 
-
-
 def score_deck(deck: str,
                seq1: str,
                seq2: str) -> Tuple[int]:
     '''
-    Given a shuffled deck of cards, a sequence chosen by player1, and a sequence chosen by player two, 
+    Given a shuffled deck of cards, a sequence chosen by player two (me), and a sequence chosen by player two (opponent), 
     return the number of cards/tricks for each variation of Penney's Game.
     
     Arguments:
         - deck (str): randomly shuffled deck of 52 cards
-        - seq1 (str): the 3-card sequence chosen by player 1 (ex. BBB, RBR)
-        - seq2 (str): the 3-card sequence chosen by player 2 (ex. RRR, BRB)
+        - seq1 (str): the 3-card sequence chosen by player 1 (opponent) (ex. BBB, RBR)
+        - seq2 (str): the 3-card sequence chosen by player 2 (me) (ex. RRR, BRB)
 
     Outputs:
-        - p1_cards (int): the number of cards player 1 won
-        - p2_cards (int): the number of cards player 2 won
-        - p1_tricks (int): the number of tricks player 1 won
-        - p2_tricks (int): the number of tricks player 2 won
+        - p1_cards (int): the number of cards player 1 (opponent) won
+        - p2_cards (int): the number of cards player 2 (me) won
+        - p1_tricks (int): the number of tricks player 1 (opponent) won
+        - p2_tricks (int): the number of tricks player 2 (me) won
     '''
     p1_cards = 0
     p2_cards = 0
-    pile = 2
+    pile = 2 # because we are starting at the third position
     
     p1_tricks = 0
     p2_tricks = 0
     
     i = 0
-    deck_len = len(deck) - 2
-
-    while i < deck_len:
+    while i < len(deck) - 2: # iterate through the deck, adding 1 to the pile for each step, then check the current sequence
         pile += 1
         current_sequence = deck[i:i+3]
+      # if the sequence matches either player's sequence, add the current pile to their cards and restart the pile. 
+      # add one to their tricks and move forward three cards in the deck.
         if current_sequence == seq1:
             p1_cards += pile
             pile = 2
@@ -257,7 +245,7 @@ def score_deck(deck: str,
             pile = 2 
             p2_tricks += 1
             i += 3
-        else:
+        else: # if no one wins just move through the deck
             i += 1
 
     return p1_cards, p2_cards, p1_tricks, p2_tricks
