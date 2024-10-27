@@ -6,8 +6,10 @@
 Penney's game is a card game where two players choose a pattern (like red, black, black) and play cards from the deck until that pattern appears. Scores can be calculated using cards (the number of total cards up until a pattern is found) or tricks (the number of times the pattern is found).
 
 This project simulates Penney’s Game with both cards and tricks to determine the optimal starting sequences. There is a strategic advantage based on how sequences are chosen, despite the appearance of fairness. First, let your opponent choose their sequence. Then, choose a sequence that is statistically more likely to appear before your opponent's sequence by following this pattern: (not second choice) (first choice) (second choice). For example, if the pattern of your opponent’s sequence is 121, your sequence should be 112 to increase your chances of a win. This strategy prompted the main research questions explored in this analysis, which include:
-How does Penney’s game’s win probability differ when we score based on trick counts rather than card counts? Why?
-Does the winner probability change when ties are accounted for in each play?
+- How does Penney’s game’s win probability differ when we score based on trick counts rather than card counts? Why?
+- Does the winner probability change when ties are accounted for in each play?
+- Does scoring by tricks or total cards have an impact on any particular game?
+- If the players select their sequences privately, do strategies exist that are better than randomly guessing?
 
 A full explanation of the game and win strategy can be found in the following links:
 
