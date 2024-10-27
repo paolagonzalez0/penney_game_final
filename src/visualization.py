@@ -44,7 +44,6 @@ def format_data(array: np.ndarray, countwins= False) -> np.ndarray:
     Output:
         - flipped (np.ndarray): array that has been properly flipped, and has values properly rounded as either whole numbers or decimals
     '''
-    #takes the original decimal probabilities and puts them in the whole number format of percent and fills the 'nonsense' diagonal
 
     array = array.astype(float)
     if countwins:
