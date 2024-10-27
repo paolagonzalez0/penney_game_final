@@ -50,27 +50,19 @@ main.make_heatmap_package()
 ## Details
 
 ### Random data: `shuffle_deck`
-
 To generate the random decks, the `shuffle_deck` function creates a numpy ndarray with 26 zeroes and 26 ones (a zero represents a black card, and a one represents a red card). Using numpy's random number generator object, it sets a seed if the user has specified it, and then shuffles the deck. This creates an array, which is then converted to a string.  The `play_n_games` function will run this function for every iteration of n, before calculating the results.
 
 ### Scoring of data: `score_deck`, `calculate_winner`, `play_one_deck`
-
 The `score_deck` function takes in the 52 character string produced by `shuffle_deck` along with the 3 pattern sequences from both players. It calcuates the number of cards and tricks won by each player for a specific deck. The `calculate_winner` function takes in the outputs from `score_deck` and calculates the winner for both the cards and tricks variations, counting for ties in both variations. Finally, `play_one_deck` runs both the `score_deck` and `calculate_winner` functions for all possible combinations and stores the results for the play in 4 numpy arrays, representing results for each combination: one for the cards winner, one for whether a tie occurred for cards, one for the tricks winner, and one for whether a tie occurred for tricks. In this scenario, the player "me" is player two, and wins are labeled as a 1. If the other player wins, the same space is labeled as a 0. This raw data can be found under the "data" directory.
 
 ### Calculating probabilities: `sum_games`
+To calculate the win/tie probabilities, `sum_games` iterates through all the files in a given directory and sums the raw results. It then returns the average of a given directory, along with an integer representing the number of games played/stored in the directory.
 
-To calculate the win/tie probabilities, `sum_games` iterates through all the files in each directory stored under "data" and sums the raw results. It then returns the summations (or the average) of a given directory "cards", "tricks", "card_ties", or "trick_ties" along with an integer representing the number of games played/stored in the file.
-
-### Running main program: `play_n_games`
-
-To run the entire process, the `play_n_games` will run the processes described above (i.e. generate random data, score the plays, and calculate the win and tie probabilities for all simulations). It writes the final JSON results file storing an 8x8 list of lists for the cards, tricks, card_ties, and trick_ties win and tie probabilities. This file is then stored in "results" directory. This file also returns the results formatted for the visualization task.
+### Putting it all together: `play_n_games`
+To run the entire process, the `play_n_games` will generate random data, score the plays, and calculate the win and tie probabilities for all simulations. It writes the final JSON results file storing an 8x8 list of lists for the cards, tricks, card_ties, and trick_ties probabilities. This file is then stored in the "results" directory. This file also returns the results formatted for the visualization task.
 
 ### Visualization: `create_heatmap`, `make_heatmap_package`, `save_figures`
-
-To visualize the results, the `create_heatmap` and `make_heatmap_package` create the final heatmaps for comparison. Along with this, it saves the PNG and HTML files (using `save_figures`) of each visualization in the "figures" directory. To create a single heatmap using `create_heatmap`, the `get_data` function loads in the final simulation results from the JSON file. Next, we reformat the data (either cards/card_ties or tricks/trick_ties) using `format_data`. The labels for the heatmap are generated using `make_annots`. Finally, we input the data and labels into `make_heatmap` and return the visualization. 
+To visualize the results, the `create_heatmap` and `make_heatmap_package` functions create the final heatmaps. `create_heatmap` will create the heatmap for a single variation (cards or tricks), while `make_heatmap_package` creates heatmaps for both variations. These functions then save the heatmaps as PNG and HTML files (using `save_figures`) in the "figures" directory. To create a single heatmap using `create_heatmap`, the `get_data` function loads in the final simulation results from the JSON file. Next, we reformat the data (either cards/card_ties or tricks/trick_ties) using `format_data`. The labels for the heatmap are generated using `make_annots`. Finally, we input the data and labels into `make_heatmap` and return the visualization.
 
 ### Final Output
-
-This program produces two heatmaps to compare the win probabilities of the two variations of Penney's game. These visualizations can be found in the "figures" directory. Each heatmap cell represents the win probability of each pair of 3-pattern sequences used by the player and their opponent. The darker the cell, the more likely it is for the player to win and the lighter the cell, the more likely it is for the opponent to win. Since both players cannot have the same pattern, the diagonal is grayed out. By putting the cards and tricks heatmaps next to one another, we can easily compare the final win results.
-
-
+This program produces two heatmaps to compare the win probabilities of the two variations of Penney's game. These visualizations can be found in the "figures" directory. Each heatmap cell represents the win probability of each pair of 3-pattern sequences used by the player and their opponent. The darker the cell, the more likely it is for the player to win and vice versa. Since both players cannot have the same pattern, the diagonal (where the players have identical patterns) is grayed out. By putting the cards and tricks heatmaps next to one another, we can easily compare the final win results. There is some symmetry about the visualization, but we decided to include the entirety of the calculated results to ensure no assumptions were made about the data.
