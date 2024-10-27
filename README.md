@@ -1,5 +1,7 @@
 # Penney's Game Project
 
+###  "In poker and in life, the game isn’t about the cards you’re dealt but how you play them." - Anon
+
 ## Description
 Penney's game is a card game where two players choose a pattern (like red, black, black) and play cards from the deck until that pattern appears. Scores can be calculated using cards (the number of total cards up until a pattern is found) or tricks (the number of times the pattern is found).
 
