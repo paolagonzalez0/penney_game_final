@@ -10,9 +10,16 @@ import matplotlib.pyplot as plt
 import mpld3
 from matplotlib.ticker import PercentFormatter
 
-def shuffle_deck(seed:None):
-    '''Generates a single shuffled deck'''
-    rng = np.random.default_rng(seed = seed)
+def shuffle_deck(seed:int):
+    '''Generates a single shuffled deck of 0s and 1s. 
+
+    Argumements: 
+    seed (int): Seed to ensure reproducibility
+
+    Output:
+    A string of 52 characters where each character is either '0' or '1', representing a shuffled deck.
+    '''
+    rng = np.random.default_rng(seed = seed) 
     deck = np.ndarray.flatten((np.stack((np.ones(26), np.zeros(26)), axis= 0).astype(int)))
     rng.shuffle(deck)
     return ''.join(map(str, deck))
@@ -32,12 +39,14 @@ def results_for_viz(x):
     with open(os.path.join(data_folder,'results.json'), 'w') as json_file:
         json.dump(x, json_file, indent=4)
 
-def play_n_games(n, data):
+def play_n_games(n: int, data: str, initial_seed: int = 0):
     """
-    Runs 
-    n: number of games user would like to simulate
-	data: data folder to store results for each iteration
-
+    Runs simulations for n games, saving results to the specified data folder.
+    
+    Parameters:
+    - n (int): Number of games to simulate.
+    - data (str): Folder to store results for each iteration.
+    - initial_seed (int): Starting seed value for random number generation.
     """
     if not os.path.exists(data):
         os.makedirs(os.path.join(data,'cards'))
@@ -46,7 +55,7 @@ def play_n_games(n, data):
         os.makedirs(os.path.join(data,'trick_ties'))
 
     for i in range(n):
-        deck = shuffle_deck(None)
+        deck = shuffle_deck(seed=initial_seed + i)
         processing.play_one_deck(data = data, deck = deck)
 
     filename = ['cards', 'card_ties', 'tricks', 'trick_ties']
