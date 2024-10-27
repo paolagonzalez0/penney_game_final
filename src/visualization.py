@@ -104,6 +104,21 @@ def make_heatmap(data: np.ndarray,
     '''
     If ax is None, create a new figure.
     Otherwise, add the heatmap to the provided ax.
+
+    Returns a heatmap with the input data.
+
+    Arguments:
+        - data (np.ndarray): the win data for the heatmap
+        - annots (np.ndarray): the annotations that will appear on the heatmap (allowing a representation of both wins and ties in one heatmap)
+        - title (str): title of the heatmap (specified in main.py for the different variations)
+        - n (int): number of games in the dataset
+        - hide_y (bool): for make_heatmap_package, hide the y axis on the first one so there is no unnecessary repetition
+        - cbar_single (bool): specifies whether to add a colorbar (for single plots)
+        - ax (plt.Axes): adds the heatmap to a specified ax. If ax is None, makes a new figure.
+
+    Output:
+        - fig (plt.Figure): Figure with the created heatmap
+        - ax (plt.Axes): ax with the created heatmap
     '''
     
     if ax is None:
@@ -135,11 +150,6 @@ def make_heatmap(data: np.ndarray,
     ax.set_xticklabels(seqs, fontsize=TICK_SIZE)
     ax.set_yticklabels(seqs[::-1], fontsize=TICK_SIZE)
     ax.set_facecolor('#DBDBDB')
-
-    '''
-    If a standalone plot is being created, the colorbar should be adjusted in this make_heatmap function 
-    If bundled heatmaps are being made, the colorbar will be adjusted in the make_heatmap_package function to avoid double colorbars
-    '''
 
     if cbar_single: 
         cbar_ax = fig.add_axes([.95, 0.11, 0.035, .77])
