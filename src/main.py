@@ -27,6 +27,18 @@ def shuffle_deck(seed:int):
 def results_for_viz(x):
     """
     Takes in results from play_n_games() function. Reformats results of simulations for heatmap visualization.
+
+    Arguments:
+    x (dict): A dictionary containing the results from the play_n_games() function. 
+                Keys:
+                - 'cards': A list of number of cards won by Me player.
+                - 'tricks': A list of number of tricks won by Me player.
+                - 'card_ties': A list of counts of card ties.
+                - 'trick_ties': A list of counts of trick ties.
+
+    Output:
+    Saves the reformatted results to a JSON file named 'results.json' in the 'results' folder. If the 
+    folder does not exist, it will be created.
     """
     x['cards'] = x['cards'].tolist()
     x['tricks'] = x['tricks'].tolist()
@@ -43,10 +55,16 @@ def play_n_games(n: int, data: str, initial_seed: int = 0):
     """
     Runs simulations for n games, saving results to the specified data folder.
     
-    Parameters:
+    Arguments:
     - n (int): Number of games to simulate.
     - data (str): Folder to store results for each iteration.
     - initial_seed (int): Starting seed value for random number generation.
+
+    Output:
+    Saves the results of the simulations in a JSON file named 'results.json' within the specified data folder. 
+    The file contains information about each game's outcome, including details such as number of cards won, number 
+    of tricks won, and ties that occurred during the games for both variations. If the data folder does 
+    not exist, it will be created. The results are added to the results that already exist in the results.json file. 
     """
     if not os.path.exists(data):
         os.makedirs(os.path.join(data,'cards'))
@@ -66,30 +84,54 @@ def play_n_games(n: int, data: str, initial_seed: int = 0):
         results[folder], g_num = processing.sum_games(f'{data}/{folder}', True)
         n_games.append(g_num)
     results['n'] = n_games[0]
-    # Reformat and save results for viz
+    # Reformatting and save results for viz
     results_for_viz(results)
     return results
 
-def save_figures(figures, output_html):
+def save_figures(figures, file_name):
     """
-    Save figures as images and embed them in an HTML file.
+    Save figures as png images and embed them in an HTML file.
     
-    :param figures: List of Matplotlib figures to save
-    :param output_html: Output HTML file name
+    Arguments:
+    - figures: the matplotlib figure object to save 
+    - file_name (str): The name you want to give to the html and png files
+
+    Output:
+    Saves the figure as a png image in the 'figures' folder and creates an HTML file that embeds this figure. 
+    The png and html files are named according to the specified file_name with the corresponding extension.
     """
-    # Save the figure as a PNG file in the 'figures' folder
-    filename = output_html.replace('.html', '.png')
+    # saving figure as png in 'figures' folder
+    filename = file_name.replace('.html', '.png')
     figures.savefig(filename, bbox_inches='tight')
 
-    # Create HTML
+    # creating HTML
     html_content = html_content = mpld3.fig_to_html(figures)
 
-    # Save the HTML to a file
-    with open(output_html, 'w') as f:
+    # saving the HTML to a file
+    with open(file_name, 'w') as f:
         f.write(html_content)
 
 
 def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pkg: bool = False):
+    '''
+    Creates a heatmap visualization based on either card or trick data, saving the output as an html and png file.
+    Visualization specifications are based on class specifications. 
+
+    Arguments:
+        - variation (str): Specifies the type of data to visualize. Use 'cards' for card variation or 
+            'tricks' for trick variation.
+        - ax (plt.Axes, optional): Matplotlib Axes object where the heatmap will be drawn. If None, 
+            a new figure and axes will be created.
+        - hide_y (bool, optional): If True, hides the y-axis of the heatmap. Default is False.
+        - pkg (bool, optional): If False, creates and saves heatmaps as individual figures for standalone use. 
+            Default is False.
+
+    Output:
+        A tuple containing the Matplotlib figure and axes objects for the created heatmap. 
+        If `pkg` is `False`, the figure is saved as a PNG image in the 'figures' folder and creates an 
+        HTML file that embeds this figure. The files are named according to the specified file name.
+    '''
+
     # Ensure 'figures' directory exists
     if not os.path.exists('figures'):
         os.makedirs('figures')
@@ -128,6 +170,13 @@ def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pk
 def make_heatmap_package() -> [plt.Figure, plt.Axes]:
     '''
     Create a 1x2 grid of heatmaps based on the given data, with shared colorbar.
+    This function generates two heatmaps side by side: one for card data and one for trick data.
+    The heatmaps are created using the `create_heatmap` function.
+
+    Returns:
+        A tuple containing the Matplotlib figure and axes objects for the created heatmaps. The figure is 
+        saved as an HTML file and a PNG image in the 'figures' directory with the filenames 'pkg_heatmap.html' 
+        and 'pkg_heatmap.png', respectively.
     '''
     
     # Create a 1x2 grid for the heatmaps
