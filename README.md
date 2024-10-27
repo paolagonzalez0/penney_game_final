@@ -20,7 +20,7 @@ https://www.datascienceassn.org/sites/default/files/Humble-Nishiyama%20Randomnes
 
 An example for how to run this program can be found in final_run.ipynb.
 
-Warning: downloading the data directory is a computationally expensive process and is not nessecarily recommended.
+*Warning: downloading the data directory is a computationally expensive process and is not nessecarily recommended.*
 
 To begin, you'll need to import the `main` file.
 ```
