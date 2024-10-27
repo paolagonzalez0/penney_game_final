@@ -46,11 +46,14 @@ def format_data(array: np.ndarray, countwins= False) -> np.ndarray:
     '''
 
     array = array.astype(float)
+    # Return whole number structure
     if countwins:
         temp = np.flip((np.round((array)*100,0)),0)
+    # Return the decimals
     else:
         temp = np.flip((np.round(array)), 0)
-        
+
+    # Properly flip the array
     flipped = fill_diag(temp, np.nan)
     return flipped
 
@@ -67,6 +70,7 @@ def fill_diag(array: np.ndarray, filler) -> np.ndarray:
     '''
     
     flipped = np.flip(array, 0)
+    # Fill diagonal cells with given filler object
     np.fill_diagonal(flipped, filler)
     return np.flip(flipped,0)
 
@@ -87,8 +91,10 @@ def make_annots(wins : np.ndarray,ties: np.ndarray) -> np.ndarray:
     for i in range(8):
         row = []
         for j in range(8):
+            # Format string labels
             row.append(f'{str(wins[i,j])[:-2]} ({str(ties[i,j])[:-2]})')
         annots.append(row)
+    # Fill diagonal cells with filler object
     annots=fill_diag(annots, "")
     return np.array(annots)
 
@@ -121,15 +127,16 @@ def make_heatmap(data: np.ndarray,
     '''
     
     if ax is None:
-        # Create a new figure
+        # Create new figure
         fig, ax = plt.subplots(1, 1, figsize=(FIG_WIDE, FIG_HIGH))
     else:
-        # Get the parent figure
+        # Get parent figure
         fig = ax.get_figure()
 
     # Tick labels as letters
     seqs= ['BBB','BBR','BRB','BRR','RBB','RBR','RRB','RRR'] 
 
+    # Heatmap properties
     settings = {
         'vmin': 0,
         'vmax': 100,
@@ -141,21 +148,25 @@ def make_heatmap(data: np.ndarray,
         'fmt': ''
     }
 
-    
+    # Create the heatmap using seaborn
     sns.heatmap(data=data, ax=ax,  **settings)
+    # Set x and y labels
     ax.set_xlabel('Me', fontsize=LABEL_SIZE)
     ax.set_ylabel('Opponent', fontsize=LABEL_SIZE)
+    # Set the tick labels for x-axis and y-axis
     ax.set_xticklabels(seqs, fontsize=TICK_SIZE)
     ax.set_yticklabels(seqs[::-1], fontsize=TICK_SIZE)
     ax.set_facecolor('#DBDBDB')
 
+    # Add a color bar if prompted
     if cbar_single: 
         cbar_ax = fig.add_axes([.95, 0.11, 0.035, .77])
         cb = fig.colorbar(ax.collections[0], cax=cbar_ax)
         # Adjusting the tickmark sizes on color bar 
         cb.ax.tick_params(labelsize=TICK_SIZE)
         cb.outline.set_linewidth(.2)
-
+        
+    # Set the title of the visualization
     ax.set_title(title+'\n(n='+str(n)+')', fontsize=TITLE_SIZE)
                     
     # For package heatmap visualization, both the y-ticks and axis title should be hidden on 2nd subplot
