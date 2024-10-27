@@ -6,7 +6,7 @@ from typing import Tuple
 
 def score_deck(deck: str,
                seq1: str,
-               seq2: str) -> Tuple[int]:
+               seq2: str) -> Tuple[int, int, int, int]:
     '''
     Given a shuffled deck of cards, a sequence chosen by player two (me), and a sequence chosen by player two (opponent), 
     return the number of cards/tricks for each variation of Penney's Game.
@@ -54,7 +54,7 @@ def score_deck(deck: str,
 def calculate_winner(p1_cards: int,
                      p2_cards: int,
                      p1_tricks: int,
-                     p2_tricks: int):
+                     p2_tricks: int)-> Tuple[int, int, int, int]:
         '''
         Given the number of cards and tricks for each player, calculate who wins for cards and tricks, as well as draws for cards and tricks.
         If player one (opponent) wins, the winner is set to 0. If player 2 (me) wins, the winner is set to 1.
@@ -126,7 +126,7 @@ def play_one_deck(deck: str,
     np.save(f'{data}/card_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
     np.save(f'{data}/trick_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
 
-def sum_games(data: str, average: bool):
+def sum_games(data: str, average: bool)-> Tuple[np.ndarray, int]:
     '''
     Iterate over each file in the specified data filepath, and calculates the sum (or the average).
 
