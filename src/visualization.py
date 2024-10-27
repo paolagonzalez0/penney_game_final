@@ -127,9 +127,8 @@ def make_heatmap(data: np.ndarray,
         # Get the parent figure
         fig = ax.get_figure()
 
-    seqs= ['BBB','BBR','BRB','BRR','RBB','RBR','RRB','RRR'] #if letters are desired tick labels
-
-    # seqs = [f'{i:b}'.zfill(3) for i in range(8)] ##if numbers are desired tick labels
+    # Tick labels as letters
+    seqs= ['BBB','BBR','BRB','BRR','RBB','RBR','RRB','RRR'] 
 
     settings = {
         'vmin': 0,
@@ -153,13 +152,14 @@ def make_heatmap(data: np.ndarray,
     if cbar_single: 
         cbar_ax = fig.add_axes([.95, 0.11, 0.035, .77])
         cb = fig.colorbar(ax.collections[0], cax=cbar_ax)
-        #adjusting the tickmark sizes on colorbar 
+        # Adjusting the tickmark sizes on color bar 
         cb.ax.tick_params(labelsize=TICK_SIZE)
         cb.outline.set_linewidth(.2)
 
     ax.set_title(title+'\n(n='+str(n)+')', fontsize=TITLE_SIZE)
-    
-    if hide_y: ### for bundled heatmaps, both the yticks and axis title should be hidden on 2nd subplot
+                    
+    # For package heatmap visualization, both the y-ticks and axis title should be hidden on 2nd subplot
+    if hide_y:
         ax.set_yticks([])
         ax.set_ylabel(None)
      
