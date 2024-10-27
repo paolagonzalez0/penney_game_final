@@ -8,19 +8,19 @@ def score_deck(deck: str,
                seq1: str,
                seq2: str) -> Tuple[int]:
     '''
-    Given a shuffled deck of cards, a sequence chosen by player1, and a sequence chosen by player two, 
+    Given a shuffled deck of cards, a sequence chosen by player two (me), and a sequence chosen by player two (opponent), 
     return the number of cards/tricks for each variation of Penney's Game.
     
     Arguments:
         - deck (str): randomly shuffled deck of 52 cards
-        - seq1 (str): the 3-card sequence chosen by player 1 (ex. BBB, RBR)
-        - seq2 (str): the 3-card sequence chosen by player 2 (ex. RRR, BRB)
+        - seq1 (str): the 3-card sequence chosen by player 1 (opponent) (ex. BBB, RBR)
+        - seq2 (str): the 3-card sequence chosen by player 2 (me) (ex. RRR, BRB)
 
     Outputs:
-        - p1_cards (int): the number of cards player 1 won
-        - p2_cards (int): the number of cards player 2 won
-        - p1_tricks (int): the number of tricks player 1 won
-        - p2_tricks (int): the number of tricks player 2 won
+        - p1_cards (int): the number of cards player 1 (opponent) won
+        - p2_cards (int): the number of cards player 2 (me) won
+        - p1_tricks (int): the number of tricks player 1 (opponent) won
+        - p2_tricks (int): the number of tricks player 2 (me) won
     '''
     p1_cards = 0
     p2_cards = 0
@@ -33,7 +33,8 @@ def score_deck(deck: str,
     while i < len(deck) - 2: # iterate through the deck, adding 1 to the pile for each step, then check the current sequence
         pile += 1
         current_sequence = deck[i:i+3]
-      # if the sequence matches either player's sequence, add the current pile to their cards and restart the pile. add one to their tricks and move forward three cards in the deck.
+      # if the sequence matches either player's sequence, add the current pile to their cards and restart the pile. 
+      # add one to their tricks and move forward three cards in the deck.
         if current_sequence == seq1:
             p1_cards += pile
             pile = 2
@@ -56,7 +57,7 @@ def calculate_winner(p1_cards: int,
                      p2_tricks: int):
         '''
         Given the number of cards and tricks for each player, calculate who wins for cards and tricks, as well as draws for cards and tricks.
-        If player one wins, the winner is set to 0. If player 2 wins, the winner is set to 1.
+        If player one (opponent) wins, the winner is set to 0. If player 2 (me) wins, the winner is set to 1.
         Also indicates if there was a draw.
 
         Arguments:
