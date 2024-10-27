@@ -24,15 +24,16 @@ def score_deck(deck: str,
     '''
     p1_cards = 0
     p2_cards = 0
-    pile = 2
+    pile = 2 # because we are starting at the third position
     
     p1_tricks = 0
     p2_tricks = 0
     
     i = 0
-    while i < len(deck) - 2:
+    while i < len(deck) - 2: # iterate through the deck, adding 1 to the pile for each step, then check the current sequence
         pile += 1
         current_sequence = deck[i:i+3]
+      # if the sequence matches either player's sequence, add the current pile to their cards and restart the pile. add one to their tricks and move forward three cards in the deck.
         if current_sequence == seq1:
             p1_cards += pile
             pile = 2
@@ -43,7 +44,7 @@ def score_deck(deck: str,
             pile = 2 
             p2_tricks += 1
             i += 3
-        else:
+        else: # if no one wins just move through the deck
             i += 1
 
     return p1_cards, p2_cards, p1_tricks, p2_tricks
@@ -59,23 +60,24 @@ def calculate_winner(p1_cards: int,
         Also indicates if there was a draw.
 
         Arguments:
-            p1_cards (int): number of cards player 1 won
-            p2_cards (int): number of cards player 2 won
-            p1_tricks (int): number of tricks player 1 won
-            p2_tricks (int): number of tricks player 2 won
+            - p1_cards (int): number of cards player 1 won
+            - p2_cards (int): number of cards player 2 won
+            - p1_tricks (int): number of tricks player 1 won
+            - p2_tricks (int): number of tricks player 2 won
         
         Output:
-            cards_winner (int): specifies who won based on cards
-            cards_draw (int): 1 if a draw occurred, 0 otherwise
-            tricks_winner (int): specifies who won based on tricks
-            tricks_draw (int): 1 if a draw occured, 0 otherwise
+            - cards_winner (int): specifies who won based on cards
+            - cards_draw (int): 1 if a draw occurred, 0 otherwise
+            - tricks_winner (int): specifies who won based on tricks
+            - tricks_draw (int): 1 if a draw occured, 0 otherwise
         '''
+        # initializations only change if p2 wins or there is a draw
         cards_winner = 0
         cards_draw = 0
         tricks_winner = 0
         tricks_draw = 0
 
-        # if p2 wins set winner to 1, otherwise it is 0 (including draws).
+        # if p2 wins, set winner to 1, otherwise it is 0 (including draws)
         # if there is a draw, set draw counter to 1
         if p1_cards < p2_cards:
             cards_winner = 1
@@ -83,7 +85,7 @@ def calculate_winner(p1_cards: int,
             cards_draw = 1
         if p1_tricks < p2_tricks:
             tricks_winner = 1
-        elif p1_tricks == p2_tricks:
+        elif p1_tricks == p2_tricks: 
             tricks_draw = 1
         return cards_winner, cards_draw, tricks_winner, tricks_draw
 
@@ -99,22 +101,25 @@ def play_one_deck(deck: str,
     
     Returns nothing, but saves .npy files for each category (cards, tricks, ties for cards, tricks for cards) to the specified data folder.
     '''
-    sequences = ['000', '001', '010', '011', '100', '101', '110', '111']
-    combinations = itertools.product(sequences, repeat=2)
+    sequences = ['000', '001', '010', '011', '100', '101', '110', '111'] # possible selections for either player
+    combinations = itertools.product(sequences, repeat=2) # create all possible combinations of p1 and p2's choices
     p2_wins_cards = pd.DataFrame(columns=sequences, index=sequences)
     p2_wins_tricks = pd.DataFrame(columns=sequences, index=sequences)
     draws_cards = pd.DataFrame(columns=sequences, index=sequences)
     draws_tricks = pd.DataFrame(columns=sequences, index=sequences)
 
-    for seq1, seq2 in combinations:
+    for seq1, seq2 in combinations: # for each possible play sequence for p1 and p2: score the deck versus the selections, calculate the winner, and then insert the wins 
         p1_cards, p2_cards, p1_tricks, p2_tricks = score_deck(deck, seq1, seq2)
         cards_winner, cards_draw, tricks_winner, tricks_draw = calculate_winner(p1_cards, p2_cards, p1_tricks, p2_tricks)
+        # insert wins at the location on the DataFrame corresponding to the two sequences
         p2_wins_cards.at[seq1, seq2] = cards_winner
         draws_cards.at[seq1, seq2] = cards_draw
         p2_wins_tricks.at[seq1, seq2] = tricks_winner
         draws_tricks.at[seq1, seq2] = tricks_draw
     
-    deck_name = str(int(deck, 2))
+    deck_name = str(int(deck, 2)) # convert the binary deck to a number to name the results files
+
+    # save the results to different folders for each variation
     np.save(f'{data}/cards/{deck_name}.npy', p2_wins_cards, allow_pickle = True)
     np.save(f'{data}/tricks/{deck_name}.npy', p2_wins_tricks, allow_pickle = True)
     np.save(f'{data}/card_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
