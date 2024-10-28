@@ -42,24 +42,24 @@ def format_data(array: np.ndarray, countwins= False) -> np.ndarray:
         - countwins (bool): if True, return the whole number structure (as percentages out of 100). If False, return just the decimals.
 
     Output:
-        - flipped (np.ndarray): array that has been properly flipped, and has values properly rounded as either whole numbers or decimals
+        - formatted (np.ndarray): A 2D NumPy array that has been rounded and formatted. The diagonal from the bottom-left to the top-right is filled with np.nan
     '''
 
-    array = array.astype(float)
+    array = np.array(array, dtype=float)  # Ensure input is a NumPy array
     # Return whole number structure
     if countwins:
-        temp = np.flip((np.round((array)*100,0)),0)
+        temp = np.round(array * 100, 0)
     # Return the decimals
     else:
-        temp = np.flip((np.round(array)), 0)
+        temp = np.round(array, 2)
 
-    # Properly flip the array
-    flipped = fill_diag(temp, np.nan)
-    return flipped
+    # Fill the diagonal with NaN
+    formatted = fill_diag(temp, np.nan)
+    return formatted
 
 def fill_diag(array: np.ndarray, filler) -> np.ndarray:
     '''
-    Fills the diagonal of a given array with a given filler object.
+    Fills the diagonal from the bottom-left to the top-right of array with a specified filler object.
 
     Arguments:
         - array (np.ndarray): the array to be properly formatted and filled with the filler
@@ -69,11 +69,10 @@ def fill_diag(array: np.ndarray, filler) -> np.ndarray:
         - array with diagonal filled in with filler
     '''
     
-    flipped = np.flip(array, 0)
-    # Fill diagonal cells with given filler object
-    np.fill_diagonal(flipped, filler)
-    return np.flip(flipped,0)
-
+    array = np.array(array)  # Ensure input is a NumPy array
+    flipped_array = np.flipud(array) # # Flipping upside down
+    np.fill_diagonal(flipped_array, filler) # Filling the diagonal
+    return np.flipud(flipped_array) # flip back to original orientation
 
 
 def make_annots(wins : np.ndarray,ties: np.ndarray) -> np.ndarray:

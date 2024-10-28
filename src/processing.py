@@ -120,6 +120,13 @@ def play_one_deck(deck: str,
     
     deck_name = str(int(deck, 2)) # convert the binary deck to a number to name the results files
 
+    # Reorder rows to start with '000' in the bottom-left corner
+    reversed_sequences = sequences[::-1]
+    p2_wins_cards = p2_wins_cards.loc[reversed_sequences, :]
+    p2_wins_tricks = p2_wins_tricks.loc[reversed_sequences, :]
+    draws_cards = draws_cards.loc[reversed_sequences, :]
+    draws_tricks = draws_tricks.loc[reversed_sequences, :]
+
     # save the results to different folders for each variation
     np.save(f'{data}/cards/{deck_name}.npy', p2_wins_cards, allow_pickle = True)
     np.save(f'{data}/tricks/{deck_name}.npy', p2_wins_tricks, allow_pickle = True)
