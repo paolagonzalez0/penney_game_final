@@ -33,8 +33,8 @@ def results_for_viz(x):
                 Keys:
                 - 'cards': A list of number of cards won by the Me player.
                 - 'tricks': A list of number of tricks won by the Me player.
-                - 'card_ties': A list of counts of card ties.
-                - 'trick_ties': A list of counts of trick ties.
+                - 'cards_ties': A list of counts of card ties.
+                - 'tricks_ties': A list of counts of trick ties.
 
     Output:
     Saves the reformatted results to a JSON file named 'results.json' in the 'results' folder. If the 
@@ -42,8 +42,8 @@ def results_for_viz(x):
     """
     x['cards'] = x['cards'].tolist()
     x['tricks'] = x['tricks'].tolist()
-    x['card_ties'] = x['card_ties'].tolist()
-    x['trick_ties'] = x['trick_ties'].tolist()
+    x['cards_ties'] = x['cards_ties'].tolist()
+    x['tricks_ties'] = x['tricks_ties'].tolist()
 
     data_folder = 'results'
     # make results folder if it does not exist
@@ -70,15 +70,15 @@ def play_n_games(n: int, data: str, initial_seed: int = 0) -> dict:
     # makes data folder if it does not exist
     if not os.path.exists(data):
         os.makedirs(os.path.join(data,'cards'))
-        os.makedirs(os.path.join(data,'card_ties'))
+        os.makedirs(os.path.join(data,'cards_ties'))
         os.makedirs(os.path.join(data,'tricks'))
-        os.makedirs(os.path.join(data,'trick_ties'))
+        os.makedirs(os.path.join(data,'tricks_ties'))
 
     for i in range(n): # runs n games
         deck = shuffle_deck(seed=initial_seed + i)
         processing.play_one_deck(data = data, deck = deck)
 
-    filename = ['cards', 'card_ties', 'tricks', 'trick_ties']
+    filename = ['cards', 'cards_ties', 'tricks', 'tricks_ties']
     results = {}
     n_games = []
 
@@ -145,12 +145,12 @@ def create_heatmap(variation: str, ax: plt.Axes = None, hide_y: bool = False, pk
     # for cards and tricks, generate variation-specific data for the heatmaps
     if variation == 'cards':
         t1_data = visualization.format_data(np.array(data['cards']), countwins=True)
-        ties_data = visualization.format_data(np.array(data['card_ties']), countwins=True)
+        ties_data = visualization.format_data(np.array(data['cards_ties']), countwins=True)
         title = "My Chance of Winning (By Cards)"
         filename = 'figures/cards_heatmap.html'
     elif variation == 'tricks':
         t1_data = visualization.format_data(np.array(data['tricks']), countwins=True)
-        ties_data = visualization.format_data(np.array(data['trick_ties']), countwins=True)
+        ties_data = visualization.format_data(np.array(data['tricks_ties']), countwins=True)
         title = "My Chance of Winning (By Tricks)"
         filename = 'figures/tricks_heatmap.html'
     else:

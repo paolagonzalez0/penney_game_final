@@ -130,8 +130,8 @@ def play_one_deck(deck: str,
     # save the results to different folders for each variation
     np.save(f'{data}/cards/{deck_name}.npy', p2_wins_cards, allow_pickle = True)
     np.save(f'{data}/tricks/{deck_name}.npy', p2_wins_tricks, allow_pickle = True)
-    np.save(f'{data}/card_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
-    np.save(f'{data}/trick_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
+    np.save(f'{data}/cards_ties/{deck_name}.npy', draws_cards, allow_pickle = True)
+    np.save(f'{data}/tricks_ties/{deck_name}.npy', draws_tricks, allow_pickle = True)
 
 def sum_games(data: str, average: bool)-> Tuple[np.ndarray, int]:
     '''
